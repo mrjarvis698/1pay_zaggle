@@ -4,6 +4,7 @@ import shutil
 import json
 from tkinter import filedialog
 import pandas as pd
+from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 
 # Open xlsx file
@@ -75,3 +76,14 @@ else :
   page.append(output_headers)
   overall_output.save(filename = 'Output.xlsx')
   output_sheet_file_path = "Output.xlsx"
+
+def output_save():
+  entry_list = [[input_xlsx_col_A[x], input_xlsx_col_B[x], input_xlsx_col_C[x], input_xlsx_col_D[x], input_xlsx_col_E[x], input_xlsx_col_F[x], input_xlsx_col_G[x], input_xlsx_col_H[x], input_xlsx_col_I[x], input_xlsx_col_J[x]]]
+  output_wb = load_workbook(output_sheet_file_path)
+  page = output_wb.active
+  for info in entry_list:
+      page.append(info)
+  output_wb.save(filename='Output.xlsx')
+
+for x in range(0, total_input_rows):
+    output_save()
