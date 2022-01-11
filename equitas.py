@@ -6,6 +6,8 @@ from tkinter import filedialog
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -103,6 +105,15 @@ def cal():
   h = total_output_rows - 1
   print (output_cc_number[h],done_transactions_wb[h])
 
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--incognito")
+caps = DesiredCapabilities().CHROME
+#caps["pageLoadStrategy"] = "none"
+#caps["pageLoadStrategy"] = "eager"
+caps["pageLoadStrategy"] = "normal"
+driver=webdriver.Chrome(chrome_options=chrome_options, desired_capabilities=caps, executable_path="chromedriver.exe")
+driver.maximize_window()
+
 try:
   cal()
 except IndexError:
@@ -115,3 +126,5 @@ else:
     for z in range (int(done_transactions_wb[h]), 5):
         output_save()
     done_transactions_wb[h] = 0
+
+driver.quit()
