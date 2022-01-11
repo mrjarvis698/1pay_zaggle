@@ -32,10 +32,33 @@ else :
     outfile.write(json_object)
 
 # read imported xlsx file path using pandas
-input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', usecols = 'A:J', dtype=str)
-input_workbook.head()
-print (input_workbook)
+input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', dtype=str)
+total_input_rows, total_input_cols = input_workbook.shape
+print('Total Cards = ',total_input_rows)
 
-# read total number of rows present in xlsx
-number_of_rows = len(input_workbook.index)
-print('Total Cards = ',number_of_rows)
+'''
+pesudo code for dynamic loading of variables
+for heading in input_col:
+    input_variables = input_workbook[heading].values.tolist()
+    dictionary = {heading : input_variables}
+    json_object = json.dumps(dictionary, indent = 1)
+    with open("cache/"+ heading +".json", "w") as outfile:
+      outfile.write(json_object)
+    input_variables = "hemlo" + heading
+    print (input_variables)
+    input_variables = input_workbook[heading].values.tolist()
+    print (input_variables)
+'''
+
+input_col = list(input_workbook.columns.values.tolist())
+
+input_xlsx_col_A = input_workbook[input_col[0]].values.tolist()
+input_xlsx_col_B = input_workbook[input_col[1]].values.tolist()
+input_xlsx_col_C = input_workbook[input_col[2]].values.tolist()
+input_xlsx_col_D = input_workbook[input_col[3]].values.tolist()
+input_xlsx_col_E = input_workbook[input_col[4]].values.tolist()
+input_xlsx_col_F = input_workbook[input_col[5]].values.tolist()
+input_xlsx_col_G = input_workbook[input_col[6]].values.tolist()
+input_xlsx_col_H = input_workbook[input_col[7]].values.tolist()
+input_xlsx_col_I = input_workbook[input_col[8]].values.tolist()
+input_xlsx_col_J = input_workbook[input_col[9]].values.tolist()
