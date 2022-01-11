@@ -70,6 +70,7 @@ output_sheet = path.exists("Output.xlsx")
 if output_sheet == True :
   output_sheet_file_path = "Output.xlsx"
 else :
+  input_col.append('No.of Transactions')
   output_headers = input_col
   overall_output = Workbook()
   page = overall_output.active
@@ -78,12 +79,39 @@ else :
   output_sheet_file_path = "Output.xlsx"
 
 def output_save():
-  entry_list = [[input_xlsx_col_A[x], input_xlsx_col_B[x], input_xlsx_col_C[x], input_xlsx_col_D[x], input_xlsx_col_E[x], input_xlsx_col_F[x], input_xlsx_col_G[x], input_xlsx_col_H[x], input_xlsx_col_I[x], input_xlsx_col_J[x]]]
+  global output_wb
+  entry_list = [[input_xlsx_col_A[x], input_xlsx_col_B[x], input_xlsx_col_C[x], input_xlsx_col_D[x], input_xlsx_col_E[x], input_xlsx_col_F[x], input_xlsx_col_G[x], input_xlsx_col_H[x], input_xlsx_col_I[x], input_xlsx_col_J[x], z + 1]]
   output_wb = load_workbook(output_sheet_file_path)
   page = output_wb.active
   for info in entry_list:
       page.append(info)
   output_wb.save(filename='Output.xlsx')
 
-for x in range(0, total_input_rows):
-    output_save()
+#for x in range(0, total_input_rows):
+    #output_save()
+
+def cal():
+  global output_cc_number
+  global done_transactions_wb
+  global h
+  
+  output_load_wb = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', dtype=str)
+  output_col = list(output_load_wb.columns.values.tolist())
+  output_cc_number = output_load_wb[output_col[4]].values.tolist()
+  done_transactions_wb = output_load_wb[output_col[10]].values.tolist()
+  total_output_rows, total_output_cols = output_load_wb.shape
+  h = total_output_rows - 1
+  print (output_cc_number[h],done_transactions_wb[h])
+
+try:
+  cal()
+except IndexError:
+  for x in range (0 , total_input_rows):
+    for z in range (0, 5):
+        output_save()
+else:
+  last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
+  for x in range (last_txncard , total_input_rows):
+    for z in range (int(done_transactions_wb[h]), 5):
+        output_save()
+    done_transactions_wb[h] = 0
