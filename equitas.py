@@ -3,6 +3,7 @@ from os import path
 import shutil
 import json
 from tkinter import filedialog
+import pandas as pd
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -29,3 +30,12 @@ else :
   json_object = json.dumps(dictionary, indent = 1)
   with open("cache/opened_sheet.json", "w") as outfile:
     outfile.write(json_object)
+
+# read imported xlsx file path using pandas
+input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', usecols = 'A:J', dtype=str)
+input_workbook.head()
+print (input_workbook)
+
+# read total number of rows present in xlsx
+number_of_rows = len(input_workbook.index)
+print('Total Cards = ',number_of_rows)
