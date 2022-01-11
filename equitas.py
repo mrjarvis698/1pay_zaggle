@@ -4,6 +4,7 @@ import shutil
 import json
 from tkinter import filedialog
 import pandas as pd
+from openpyxl.workbook import Workbook
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -62,3 +63,15 @@ input_xlsx_col_G = input_workbook[input_col[6]].values.tolist()
 input_xlsx_col_H = input_workbook[input_col[7]].values.tolist()
 input_xlsx_col_I = input_workbook[input_col[8]].values.tolist()
 input_xlsx_col_J = input_workbook[input_col[9]].values.tolist()
+
+# get-output sheet to append output
+output_sheet = path.exists("Output.xlsx")
+if output_sheet == True :
+  output_sheet_file_path = "Output.xlsx"
+else :
+  output_headers = input_col
+  overall_output = Workbook()
+  page = overall_output.active
+  page.append(output_headers)
+  overall_output.save(filename = 'Output.xlsx')
+  output_sheet_file_path = "Output.xlsx"
