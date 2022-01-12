@@ -199,7 +199,7 @@ try:
   cal()
 except IndexError:
   for x in range (0 , total_input_rows):
-    for z in range (0, settings_data['zaggle_no.of_transation_per_card']):
+    for z in range (0, int(settings_data['zaggle_no.of_transation_per_card'])):
       cc_expiry()
       start_link()
       main()
@@ -209,7 +209,7 @@ except IndexError:
 else:
   last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
   for x in range (last_txncard , total_input_rows):
-    for z in range (int(done_transactions_wb[h]), settings_data['zaggle_no.of_transation_per_card']):
+    for z in range (int(done_transactions_wb[h]), int(settings_data['zaggle_no.of_transation_per_card'])):
       cc_expiry()
       start_link()
       main()
