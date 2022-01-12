@@ -8,7 +8,14 @@ from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import time
+import time, elapsed
+
+def clearConsole():
+    command = 'clear'
+    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        command = 'cls'
+    os.system(command)
+start_time = time.time()
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -43,7 +50,6 @@ settings_data = json.load(json_file)
 # read imported xlsx file path using pandas
 input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', dtype=str)
 total_input_rows, total_input_cols = input_workbook.shape
-print('Total Cards = ',total_input_rows)
 
 '''
 pesudo code for dynamic loading of variables
@@ -87,6 +93,13 @@ else :
   page.append(output_headers)
   overall_output.save(filename = 'Output.xlsx')
   output_sheet_file_path = "Output.xlsx"
+  end = time.time()
+  clearConsole()
+  print ("-"*40,"\nZaggle Cards - Running Card")
+  print ("-"*40,"\nCard Index =", x+1, "\nCard No =", input_xlsx_col_E[x],"\nIPin =", input_xlsx_col_F[x], "\nCVV =", input_xlsx_col_G[x], "\nStatus =", transaction_status, "\nTransaction no. of this card =", z+1)
+  print ("-"*40,"\nCards Done =", x, "| " "Cards Remaning =", total_input_rows - x, "| Total Cards =",total_input_rows)
+  print("Elapsed time = " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
+  print ("-"*40)
 
 def output_save():
   global output_wb, entry_list
@@ -111,7 +124,8 @@ def cal():
   done_transactions_wb = output_load_wb[output_col[10]].values.tolist()
   total_output_rows, total_output_cols = output_load_wb.shape
   h = total_output_rows - 1
-  print (output_cc_number[h],done_transactions_wb[h])
+  print ("-"*60,"\nLast Txn Card No. =",output_cc_number[h],"| Last Card no.of Txns =",done_transactions_wb[h])
+  print ("-"*60)
 
 chrome_options = webdriver.ChromeOptions()
 #chrome_options.add_argument("--incognito")

@@ -9,7 +9,14 @@ from openpyxl.workbook import Workbook
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
-import time
+import time, elapsed
+
+def clearConsole():
+    command = 'clear'
+    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        command = 'cls'
+    os.system(command)
+start_time = time.time()
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -44,7 +51,6 @@ settings_data = json.load(json_file)
 # read imported xlsx file path using pandas
 input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', dtype=str)
 total_input_rows, total_input_cols = input_workbook.shape
-print('Total Cards = ',total_input_rows)
 
 '''
 pesudo code for dynamic loading of variables
@@ -97,6 +103,13 @@ def output_save():
   for info in entry_list:
       page.append(info)
   output_wb.save(filename='Output.xlsx')
+  end = time.time()
+  clearConsole()
+  print ("-"*40,"\nZaggle Cards - Running Card")
+  print ("-"*40,"\nCard Index =", x+1, "\nCard No =", input_xlsx_col_E[x],"\nIPin =", input_xlsx_col_F[x], "\nCVV =", input_xlsx_col_G[x], "\nStatus =", transaction_status, "\nTransaction no. of this card =", z+1)
+  print ("-"*40,"\nCards Done =", x, "| " "Cards Remaning =", total_input_rows - x, "| Total Cards =",total_input_rows)
+  print("Elapsed time = " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
+  print ("-"*40)
 
 #for x in range(0, total_input_rows):
     #output_save()
@@ -112,7 +125,8 @@ def cal():
   done_transactions_wb = output_load_wb[output_col[10]].values.tolist()
   total_output_rows, total_output_cols = output_load_wb.shape
   h = total_output_rows - 1
-  print (output_cc_number[h],done_transactions_wb[h])
+  print ("-"*60,"\nLast Txn Card No. =",output_cc_number[h],"| Last Card no.of Txns =",done_transactions_wb[h])
+  print ("-"*60)
 
 chrome_options = webdriver.ChromeOptions()
 #chrome_options.add_argument("--incognito")
@@ -217,7 +231,6 @@ except IndexError:
       start_link()
       main()
       output_save()
-      print (entry_list)
       time.sleep(0.5)
 else:
   last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
@@ -227,7 +240,6 @@ else:
       start_link()
       main()
       output_save()
-      print (entry_list)
       time.sleep(0.5)
     done_transactions_wb[h] = 0
 
