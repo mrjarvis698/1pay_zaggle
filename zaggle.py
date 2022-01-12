@@ -111,7 +111,9 @@ def cal():
   print (output_cc_number[h],done_transactions_wb[h])
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--incognito")
+#chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-gpu")
 caps = DesiredCapabilities().CHROME
 #caps["pageLoadStrategy"] = "none"
 #caps["pageLoadStrategy"] = "eager"
@@ -179,6 +181,7 @@ def main():
   try :
     driver.find_element_by_xpath ('//*[@id="set"]/div/div/div[2]/div/div[3]/font')
   except NoSuchElementException:
+    time.sleep(2)
     transaction_status = driver.find_element_by_xpath("/html/body/center/h1").text
     pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
     if transaction_status == 'Transaction Failed':
@@ -188,6 +191,7 @@ def main():
   else :
     driver.find_element_by_xpath ('//*[@id="cancel"]').click()
     transaction_status = "Please enter correct IPIN / WEB PIN"
+    time.sleep(2)
     pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
     bank_reference_number = "-"
 
