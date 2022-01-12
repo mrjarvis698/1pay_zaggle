@@ -76,6 +76,7 @@ else :
   input_col.append('No.of Transactions')
   input_col.append('Status')
   input_col.append('PG Transaction Number')
+  input_col.append('Bank Reference Number')
   output_headers = input_col
   overall_output = Workbook()
   page = overall_output.active
@@ -85,7 +86,7 @@ else :
 
 def output_save():
   global output_wb, entry_list
-  entry_list = [[input_xlsx_col_A[x], input_xlsx_col_B[x], input_xlsx_col_C[x], input_xlsx_col_D[x], input_xlsx_col_E[x], input_xlsx_col_F[x], input_xlsx_col_G[x], input_xlsx_col_H[x], input_xlsx_col_I[x], input_xlsx_col_J[x], z + 1, transaction_status, pg_transaction_reference_number]]
+  entry_list = [[input_xlsx_col_A[x], input_xlsx_col_B[x], input_xlsx_col_C[x], input_xlsx_col_D[x], input_xlsx_col_E[x], input_xlsx_col_F[x], input_xlsx_col_G[x], input_xlsx_col_H[x], input_xlsx_col_I[x], input_xlsx_col_J[x], z + 1, transaction_status, pg_transaction_reference_number, bank_reference_number]]
   output_wb = load_workbook(output_sheet_file_path)
   page = output_wb.active
   for info in entry_list:
@@ -137,7 +138,7 @@ def start_link():
   driver.get("https://pay.1paypg.in/onepayVAS/earn-more156")
 
 def main():
-  global transaction_status, pg_transaction_reference_number
+  global transaction_status, pg_transaction_reference_number, bank_reference_number
   driver.find_element_by_id("custMobile").click()
   driver.find_element_by_id("custMobile").clear()
   driver.find_element_by_id("custMobile").send_keys(input_xlsx_col_C[x])
@@ -182,6 +183,10 @@ def main():
   time.sleep(2)
   transaction_status = driver.find_element_by_xpath("/html/body/center/h1").text
   pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
+  if transaction_status == 'Transaction Failed':
+    bank_reference_number = "-"
+  else:
+    bank_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[13]/td[2]").text
 
 try:
   cal()
