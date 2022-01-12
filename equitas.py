@@ -114,7 +114,9 @@ def cal():
   print (output_cc_number[h],done_transactions_wb[h])
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--incognito")
+#chrome_options.add_argument("--incognito")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-gpu")
 caps = DesiredCapabilities().CHROME
 #caps["pageLoadStrategy"] = "none"
 #caps["pageLoadStrategy"] = "eager"
