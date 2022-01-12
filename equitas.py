@@ -117,6 +117,22 @@ caps["pageLoadStrategy"] = "normal"
 driver=webdriver.Chrome(chrome_options=chrome_options, desired_capabilities=caps, executable_path="chromedriver.exe")
 driver.maximize_window()
 
+def cc_expiry():
+  global expiry_month
+  global expiry_year
+  global expiry_year1
+  global expiry_year2
+  global expiry_year3
+  global expiry_year4
+  workbook_expiry_month = input_xlsx_col_H[x]
+  workbook_expiry_year = input_xlsx_col_H[x]
+  expiry_month = workbook_expiry_month[:2]
+  expiry_year = workbook_expiry_year[5:]
+  expiry_year1 = workbook_expiry_year[3]
+  expiry_year2 = workbook_expiry_year[4]
+  expiry_year3 = workbook_expiry_year[5]
+  expiry_year4 = workbook_expiry_year[6]
+
 def start_link():
   driver.get("https://pay.1paypg.in/onepayVAS/earn-more156")
 
@@ -154,7 +170,11 @@ def main():
   driver.find_element_by_xpath('//*[@id="tab-B-label"]').click()
   driver.find_element_by_id("expDate").click()
   driver.find_element_by_id("expDate").clear()
-  driver.find_element_by_id("expDate").send_keys("04-2023")
+  driver.find_element_by_id("expDate").send_keys(expiry_month)
+  driver.find_element_by_id("expDate").send_keys(expiry_year1)
+  driver.find_element_by_id("expDate").send_keys(expiry_year2)
+  driver.find_element_by_id("expDate").send_keys(expiry_year3)
+  driver.find_element_by_id("expDate").send_keys(expiry_year4)
   driver.find_element_by_id("pin").click()
   driver.find_element_by_id("pin").clear()
   driver.find_element_by_id("pin").send_keys(input_xlsx_col_F[x])
@@ -168,6 +188,7 @@ try:
 except IndexError:
   for x in range (0 , total_input_rows):
     for z in range (0, 5):
+      cc_expiry()
       start_link()
       main()
       output_save()
@@ -177,6 +198,7 @@ else:
   last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
   for x in range (last_txncard , total_input_rows):
     for z in range (int(done_transactions_wb[h]), 5):
+      cc_expiry()
       start_link()
       main()
       output_save()
