@@ -36,6 +36,10 @@ else :
   with open("cache/opened_sheet.json", "w") as outfile:
     outfile.write(json_object)
 
+# Opening JSON file & returns JSON object as a dictionary
+json_file = open('settings.json')
+settings_data = json.load(json_file)
+
 # read imported xlsx file path using pandas
 input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', dtype=str)
 total_input_rows, total_input_cols = input_workbook.shape
@@ -135,7 +139,7 @@ def cc_expiry():
   expiry_year4 = workbook_expiry_year[6]
 
 def start_link():
-  driver.get("https://pay.1paypg.in/onepayVAS/earn-more156")
+  driver.get(settings_data['link'])
 
 def main():
   global transaction_status, pg_transaction_reference_number, bank_reference_number
@@ -195,7 +199,7 @@ try:
   cal()
 except IndexError:
   for x in range (0 , total_input_rows):
-    for z in range (0, 5):
+    for z in range (0, settings_data['equitas_no.of_transation_per_card']):
       cc_expiry()
       start_link()
       main()
@@ -205,7 +209,7 @@ except IndexError:
 else:
   last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
   for x in range (last_txncard , total_input_rows):
-    for z in range (int(done_transactions_wb[h]), 5):
+    for z in range (int(done_transactions_wb[h]), settings_data['equitas_no.of_transation_per_card']):
       cc_expiry()
       start_link()
       main()
