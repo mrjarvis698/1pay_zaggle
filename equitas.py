@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import time, elapsed
+import time, warnings
 
 def clearConsole():
     command = 'clear'
@@ -16,6 +16,7 @@ def clearConsole():
         command = 'cls'
     os.system(command)
 start_time = time.time()
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Open xlsx file
 open_sheet = path.exists("cache/opened_sheet.json")
@@ -93,13 +94,6 @@ else :
   page.append(output_headers)
   overall_output.save(filename = 'Output.xlsx')
   output_sheet_file_path = "Output.xlsx"
-  end = time.time()
-  clearConsole()
-  print ("-"*40,"\nZaggle Cards - Running Card")
-  print ("-"*40,"\nCard Index =", x+1, "\nCard No =", input_xlsx_col_E[x],"\nIPin =", input_xlsx_col_F[x], "\nCVV =", input_xlsx_col_G[x], "\nStatus =", transaction_status, "\nTransaction no. of this card =", z+1)
-  print ("-"*40,"\nCards Done =", x, "| " "Cards Remaning =", total_input_rows - x, "| Total Cards =",total_input_rows)
-  print("Elapsed time = " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
-  print ("-"*40)
 
 def output_save():
   global output_wb, entry_list
@@ -229,7 +223,13 @@ except IndexError:
       start_link()
       main()
       output_save()
-      print (entry_list)
+      end = time.time()
+      clearConsole()
+      print ("-"*40,"\nEquitas Cards - Running Card" "| DESK NO. =",input_xlsx_col_J[x])
+      print ("-"*40,"\nCard Index =", x+1, "\nCard No =", input_xlsx_col_E[x], "\nCVV =", input_xlsx_col_G[x], "| Expiry =", input_xlsx_col_H[x], "\nPin =", input_xlsx_col_F[x], "\nStatus =", transaction_status, "\nTransaction no. of this card =", z+1)
+      print ("-"*40,"\nCards Done =", x, "| " "Cards Remaning =", total_input_rows - x, "| Total Cards =",total_input_rows)
+      print("Elapsed time = " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
+      print ("-"*40)
       time.sleep(0.5)
 else:
   last_txncard =  input_workbook[input_workbook[input_col[4]] == output_cc_number[h]].index[0]
@@ -239,7 +239,13 @@ else:
       start_link()
       main()
       output_save()
-      print (entry_list)
+      end = time.time()
+      clearConsole()
+      print ("-"*40,"\nEquitas Cards - Running Card" "| DESK NO. =",input_xlsx_col_J[x])
+      print ("-"*40,"\nCard Index =", x+1, "\nCard No =", input_xlsx_col_E[x], "\nCVV =", input_xlsx_col_G[x], "| Expiry =", input_xlsx_col_H[x], "\nPin =", input_xlsx_col_F[x], "\nStatus =", transaction_status, "\nTransaction no. of this card =", z+1)
+      print ("-"*40,"\nCards Done =", x, "| " "Cards Remaning =", total_input_rows - x, "| Total Cards =",total_input_rows)
+      print("Elapsed time = " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)))
+      print ("-"*40)
       time.sleep(0.5)
     done_transactions_wb[h] = 0
 
