@@ -8,6 +8,7 @@ from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 # Open xlsx file
@@ -170,18 +171,25 @@ def main():
   driver.find_element_by_id("card-cvc").clear()
   driver.find_element_by_id("card-cvc").send_keys(input_xlsx_col_G[x])
   driver.find_element_by_id("payNowCC1").click()
-  time.sleep(2)
+  time.sleep(2.2)
   driver.find_element_by_xpath ('//*[@id="ipin"]').click()
   driver.find_element_by_xpath ('//*[@id="ipin"]').clear()
   driver.find_element_by_xpath ('//*[@id="ipin"]').send_keys(input_xlsx_col_F[x])
   driver.find_element_by_xpath('//*[@id="otpbut"]').click()
-  time.sleep(2)
-  transaction_status = driver.find_element_by_xpath("/html/body/center/h1").text
-  pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
-  if transaction_status == 'Transaction Failed':
+  try :
+    driver.find_element_by_xpath ('//*[@id="set"]/div/div/div[2]/div/div[3]/font')
+  except NoSuchElementException:
+    transaction_status = driver.find_element_by_xpath("/html/body/center/h1").text
+    pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
+    if transaction_status == 'Transaction Failed':
+      bank_reference_number = "-"
+    else:
+      bank_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[13]/td[2]").text
+  else :
+    driver.find_element_by_xpath ('//*[@id="cancel"]').click()
+    transaction_status = "Please enter correct IPIN / WEB PIN"
+    pg_transaction_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[5]/td[2]").text
     bank_reference_number = "-"
-  else:
-    bank_reference_number = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr[13]/td[2]").text
 
 try:
   cal()
